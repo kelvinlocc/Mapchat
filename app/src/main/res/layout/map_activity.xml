@@ -1,0 +1,162 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/top_right_category">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:id="@+id/btn_back"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Locate Shop"
+                android:id="@+id/txt_go_back"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="add text"
+            android:id="@+id/btn_add_text" />
+
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="shopdaily.dev.accordhk.com.shopdaily.Activity.MapsActivity"
+        android:layout_marginBottom="50dp"
+        android:layout_below="@+id/top_right_category" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#e6e6e6"
+
+
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:weightSum="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+
+            android:layout_marginTop="10dp" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/imageView4"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="165dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:weightSum="10"
+                    android:layout_marginLeft="5dp">
+
+                    <TextView
+                        android:id="@+id/shop_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:text="Yeah Camera Shop"
+                        android:textSize="15dp"
+                        android:layout_gravity="center_vertical" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/shop_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:text="Wan chai"
+                            android:textSize="10dp"
+                            android:textStyle="italic"
+                            android:layout_gravity="center_horizontal|left"
+                            android:clickable="true" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="right" >
+
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:text="- km"
+                        android:textSize="10dp"
+                        android:textStyle="italic"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:layout_marginLeft="10dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView20"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
