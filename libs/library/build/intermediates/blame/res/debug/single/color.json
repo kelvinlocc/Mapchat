@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\color\\common_plus_signin_btn_text_light.xml",
+        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\9.2.0\\res\\color\\common_plus_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_text_dark.xml",
+        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\9.2.0\\res\\color\\common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\color\\common_plus_signin_btn_text_dark.xml",
+        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\9.2.0\\res\\color\\common_plus_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_text_light.xml",
+        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\9.2.0\\res\\color\\common_google_signin_btn_text_light.xml"
+    }
+]

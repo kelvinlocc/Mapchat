@@ -214,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
 //            editor.apply();
 
 
-
+            longitudeNetwork = location.getLongitude();
+            latitudeNetwork = location.getLatitude();
 
             runOnUiThread(new Runnable() {
                 @Override

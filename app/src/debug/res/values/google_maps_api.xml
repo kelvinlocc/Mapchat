@@ -5,7 +5,7 @@
     To get one, follow this link, follow the directions and press "Create" at the end:
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=51:9B:7F:E6:C8:4E:55:4D:37:8C:A6:91:0B:94:AF:32:36:E0:8E:11%3Bcom.kkskysite.mapchat
-
+    x240 cer : 03:7A:E2:3D:67:28:35:52:1F:01:D9:0C:EE:EC:FD:7F:EC:4D:31:B7
     You can also add your credentials to an existing key, using this line:
     51:9B:7F:E6:C8:4E:55:4D:37:8C:A6:91:0B:94:AF:32:36:E0:8E:11;com.kkskysite.mapchat
 
@@ -15,5 +15,5 @@
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBOgaF2rXhY5Rx_U5F4vRcYxF2Rchie5aM</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCOtRiu2M3sTktWYGX0AnbSu4GSC8YVviI</string>
 </resources>

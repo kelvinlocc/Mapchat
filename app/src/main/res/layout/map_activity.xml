@@ -38,7 +38,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="add text"
+            android:text="add"
             android:id="@+id/btn_add_text" />
 
     </LinearLayout>
