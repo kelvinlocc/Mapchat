@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -17,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -28,12 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.ui.BubbleIconFactory;
 import com.google.maps.android.ui.IconGenerator;
-
-import java.security.cert.CollectionCertStoreParameters;
 
 //
 /*
@@ -50,8 +45,10 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     Boolean googleMapClickable = false;
     Context context;
     LatLng userLocation;
-    PopupWindow addText_window;
-
+    PopupWindow popupWindow_addText;
+    EditText inputText;
+    Button buttonConfirm,buttonCancel;
+    LatLng new_marker_latLng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,12 +93,11 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         moveMap(userLocation);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
+            public void onMapClick(LatLng new_point) {
 
                 if (googleMapClickable) {
-
-                    mMap.addMarker(createBubbleIcon("new location",latLng)).showInfoWindow();
-                    initiatePopupWindow();
+//                    new_marker_latLng  = point;
+                    initiatePopupWindow(new_point);
 
                     googleMapClickable = false;
                 }
@@ -180,12 +176,35 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void initiatePopupWindow (){
+    public void initiatePopupWindow (final LatLng new_point){
         LayoutInflater inflater = LayoutInflater.from(this);
         View layout = inflater.inflate(R.layout.popup_screen, (ViewGroup) this.findViewById(R.id.popup_element));
+        layout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Log.i(TAG, "initiatePopupWindow: "+layout.getMeasuredHeight()+","+layout.getMeasuredWidth());
+//        popupWindow_addText = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow_addText = new PopupWindow(layout, layout.getMeasuredWidth(),layout.getMeasuredHeight() , true);
+        popupWindow_addText.showAtLocation(layout, Gravity.CENTER,0,0);
+        inputText = (EditText) layout.findViewById(R.id.input_text);
+        buttonConfirm = (Button) layout.findViewById(R.id.btn_confirm);
+        buttonCancel = (Button) layout.findViewById(R.id.btn_cancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow_addText.dismiss();
+                Toast.makeText(Map_activity.this, "you close the pop up window", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        addText_window = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        addText_window.showAtLocation(layout, Gravity.CENTER,0,0);
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Map_activity.this, "you confirm the text to add!", Toast.LENGTH_SHORT).show();
+                mMap.addMarker(createBubbleIcon("new location",new_point)).showInfoWindow();
+
+            }
+        });
+
+
 
     }
 }

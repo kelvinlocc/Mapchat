@@ -3,4 +3,6 @@
     <string name="app_name">Mapchat</string>
     <string name="title_activity_main_activity">Map</string>
     <string name="pause">pause</string>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
 </resources>
