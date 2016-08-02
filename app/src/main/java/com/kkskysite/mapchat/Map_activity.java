@@ -17,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidquery.callback.AjaxStatus;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,6 +31,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
+import com.kkskysite.mapchat.Uility.RESTService;
+
+import org.json.JSONException;
 
 //
 /*
@@ -46,14 +51,17 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     Context context;
     LatLng userLocation;
     PopupWindow popupWindow_addText;
-    EditText inputText;
+    EditText inputText,inputTextBody;
     Button buttonConfirm,buttonCancel;
+    TextView admin_text_message;
+    RESTService service;
     LatLng new_marker_latLng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
         context = this;
+        service = new RESTService(this);
         Log.i(TAG, "onCreate: ");
 
         addText = (Button) findViewById(R.id.btn_add_text);
@@ -61,6 +69,15 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 googleMapClickable = true;
+            }
+        });
+        admin_text_message = (TextView) findViewById(R.id.admin_message);
+        service.get_admin_message("junk", new RESTService.onAjaxFinishedListener() {
+            @Override
+            public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
+                Log.i(TAG, "onFinished: json:"+json);
+                Toast.makeText(Map_activity.this, "json is :"+json, Toast.LENGTH_SHORT).show();
+                admin_text_message.setText(json);
             }
         });
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -87,7 +104,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(Map_activity.this, "update !", Toast.LENGTH_LONG).show();
 
         mMap = googleMap;
-        mMap.addMarker(createBubbleIcon("my location"));
+        mMap.addMarker(createBubbleIcon("my location","body"));
 
 
         moveMap(userLocation);
@@ -124,27 +141,27 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private MarkerOptions createBubbleIcon (String string) {
+    private MarkerOptions createBubbleIcon (String string_title,String string_body) {
         IconGenerator icon = new IconGenerator(this);
         MarkerOptions markerOption = new MarkerOptions();
 
-        Bitmap bitmap = icon.makeIcon(string);
+        Bitmap bitmap = icon.makeIcon(string_title);
         BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
         markerOption.icon(bitmapDescriptor);
         markerOption.position(userLocation);
-        markerOption.title("title");
+        markerOption.title(string_body);
         return markerOption;
     }
 
-    private MarkerOptions createBubbleIcon (String string,LatLng latlng) {
+    private MarkerOptions createBubbleIcon (String string_title, String string_body,LatLng latlng) {
         IconGenerator icon = new IconGenerator(this);
         MarkerOptions markerOption = new MarkerOptions();
 
-        Bitmap bitmap = icon.makeIcon(string);
+        Bitmap bitmap = icon.makeIcon(string_title);
         BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
         markerOption.icon(bitmapDescriptor);
         markerOption.position(latlng);
-        markerOption.title("title");
+        markerOption.title(string_body);
         return markerOption;
     }
 
@@ -185,6 +202,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         popupWindow_addText = new PopupWindow(layout, layout.getMeasuredWidth(),layout.getMeasuredHeight() , true);
         popupWindow_addText.showAtLocation(layout, Gravity.CENTER,0,0);
         inputText = (EditText) layout.findViewById(R.id.input_text);
+        inputTextBody = (EditText) layout.findViewById(R.id.input_text_body);
         buttonConfirm = (Button) layout.findViewById(R.id.btn_confirm);
         buttonCancel = (Button) layout.findViewById(R.id.btn_cancel);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -198,8 +216,12 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String string_title = inputText.getText().toString().trim();
+                String string_body = inputTextBody.getText().toString().trim();
                 Toast.makeText(Map_activity.this, "you confirm the text to add!", Toast.LENGTH_SHORT).show();
-                mMap.addMarker(createBubbleIcon("new location",new_point)).showInfoWindow();
+                mMap.addMarker(createBubbleIcon(string_title,string_body,new_point)).showInfoWindow();
+                Log.i(TAG, "onClick: "+string_body);
+                popupWindow_addText.dismiss();
 
             }
         });

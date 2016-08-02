@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:text="Yeah Camera Shop"
+                        android:text="admin:"
                         android:textSize="15dp"
                         android:layout_gravity="center_vertical" />
 
@@ -115,11 +115,11 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/shop_location"
+                            android:id="@+id/admin_message"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:text="Wan chai"
+                            android:text="message..."
                             android:textSize="10dp"
                             android:textStyle="italic"
                             android:layout_gravity="center_horizontal|left"
