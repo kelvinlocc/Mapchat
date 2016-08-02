@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by KelvinLo on 7/19/2016.
  */
 // put the android-query-full.0.26.8.jar into C:\Users\Owner\Documents\GitHub\Mapchat\app\libs,
-    // add     compile files('libs/android-query-full.0.26.8.jar') at dependencies;
+// add     compile files('libs/android-query-full.0.26.8.jar') at dependencies;
 public class RESTService {
     String TAG = this.getClass().getName();
     //    private String serverIP = "192.168.0.105"; // my localhost
@@ -53,7 +53,7 @@ public class RESTService {
     //http://localhost/USTograph_server/register.php
     public void register(final String email, final String password,
                          final onAjaxFinishedListener listener) {
-        Log.i("check_", "register :"+email+" "+password);
+        Log.i("check_", "register :" + email + " " + password);
 
         new Thread(new Runnable() {
             @Override
@@ -99,6 +99,46 @@ public class RESTService {
         }).start();
     }
 
+    public void get_admin_message(final String email, final onAjaxFinishedListener listener) {
+        Log.i(TAG, "get_admin_message: ");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String url = baseURL + "get_admin_message.php";
+                Map<String, Object> params = new HashMap<String, Object>();
+//                params.put("email",email);
+                ajaxPOSTCall(url, params, listener);
+            }
+        }).start();
+    }
+
+    public void add_new_marker(final String username, final String longitude, final String latitude, final String text_title, final String text_body, final String time, final onAjaxFinishedListener listener) {
+        Log.i(TAG, "add_new_marker: ");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String url = baseURL + "add_marker.php";
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("username",username);
+                params.put("longitude",longitude);
+                params.put("latitude",latitude);
+                params.put("text_title",text_title);
+                params.put("text_body",text_body);
+                params.put("time",time);
+                ajaxPOSTCall(url, params, listener);
+            }
+        }).start();
+    }
 
 
     private void ajaxPOSTCall(String url, Map<String, Object> params, final onAjaxFinishedListener listener) {
@@ -113,7 +153,7 @@ public class RESTService {
                     public void run() {
                         if (listener != null)
                             try {
-                                Log.i("check_","listener != null");
+                                Log.i("check_", "listener != null");
                                 listener.onFinished(url, json, status);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -129,24 +169,6 @@ public class RESTService {
 
     public interface onAjaxFinishedListener {
         public void onFinished(String url, String json, AjaxStatus status) throws JSONException;
-    }
-
-    public void  get_admin_message (final String email,final onAjaxFinishedListener listener){
-        Log.i(TAG, "get_admin_message: ");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-                String url = baseURL + "get_admin_message.php";
-                Map<String,Object> params = new HashMap<String,Object>();
-//                params.put("email",email);
-                ajaxPOSTCall(url,params,listener);
-            }
-        }).start();
     }
 
 
@@ -170,11 +192,12 @@ public class RESTService {
             }
         });
     }
+
     private void service_ajaxGETCall(String url, final onAjaxFinishedListener listener) {
         aq.ajax(url, String.class, new AjaxCallback<String>() {
             @Override
             public void callback(final String url, final String json, final AjaxStatus status) {
-                if(listener != null)
+                if (listener != null)
                     try {
                         listener.onFinished(url, json, status);
                     } catch (Exception e) {

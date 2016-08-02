@@ -219,8 +219,18 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
                 String string_title = inputText.getText().toString().trim();
                 String string_body = inputTextBody.getText().toString().trim();
                 Toast.makeText(Map_activity.this, "you confirm the text to add!", Toast.LENGTH_SHORT).show();
+
                 mMap.addMarker(createBubbleIcon(string_title,string_body,new_point)).showInfoWindow();
-                Log.i(TAG, "onClick: "+string_body);
+                String longitude = Double.toString(new_point.longitude);
+                String latitude = Double.toString(new_point.latitude);
+                Log.i(TAG, "?onClick: "+string_body);
+                service.add_new_marker("and username",longitude,latitude,string_title,string_body,"time", new RESTService.onAjaxFinishedListener() {
+                    @Override
+                    public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
+                        Log.i(TAG, "onFinished: url,json"+url+","+json);
+                        Toast.makeText(Map_activity.this, "Json: "+json, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 popupWindow_addText.dismiss();
 
             }
