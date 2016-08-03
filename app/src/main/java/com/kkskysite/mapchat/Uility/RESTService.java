@@ -140,6 +140,24 @@ public class RESTService {
         }).start();
     }
 
+    public void get_marker (final String string_location,final  onAjaxFinishedListener listener){
+        Log.i(TAG, "get_marker: ");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                String url = baseURL + "get_marker.php";
+                Map<String,Object> params = new HashMap<String,Object>();
+//                params.put("string_location",string_location);
+                ajaxPOSTCall(url,params,listener);
+            }
+        }).start();
+
+    }
 
     private void ajaxPOSTCall(String url, Map<String, Object> params, final onAjaxFinishedListener listener) {
         Log.i("check_", " ajaxPOSTCall: " + url);

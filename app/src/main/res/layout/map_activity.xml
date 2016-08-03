@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="280dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_gravity="center">
 
@@ -34,12 +34,25 @@
 
         </LinearLayout>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="add"
-            android:id="@+id/btn_add_text" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="add"
+                android:id="@+id/btn_add_text" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="update"
+                android:id="@+id/btn_update" />
+        </LinearLayout>
 
     </LinearLayout>
 

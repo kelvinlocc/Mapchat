@@ -32,8 +32,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.kkskysite.mapchat.Uility.RESTService;
+import com.kkskysite.mapchat.Uility.marker_dataModel;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
 
 //
 /*
@@ -51,18 +54,23 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     Context context;
     LatLng userLocation;
     PopupWindow popupWindow_addText;
-    EditText inputText,inputTextBody;
-    Button buttonConfirm,buttonCancel;
+    EditText inputText, inputTextBody;
+    Button buttonConfirm, buttonCancel,buttonUpdate;
     TextView admin_text_message;
-    RESTService service;
     LatLng new_marker_latLng;
+
+    RESTService service;
+    marker_dataModel myMarker_data;
+    ArrayList<marker_dataModel> myMarker_dataArray;
+//    String
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
         context = this;
         service = new RESTService(this);
-        Log.i(TAG, "onCreate: ");
+        Log.i(TAG, "onCreate2: ");
 
         addText = (Button) findViewById(R.id.btn_add_text);
         addText.setOnClickListener(new View.OnClickListener() {
@@ -71,17 +79,54 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
                 googleMapClickable = true;
             }
         });
+
+        //get admin message from server:
         admin_text_message = (TextView) findViewById(R.id.admin_message);
         service.get_admin_message("junk", new RESTService.onAjaxFinishedListener() {
             @Override
             public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
-                Log.i(TAG, "onFinished: json:"+json);
-                Toast.makeText(Map_activity.this, "json is :"+json, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "onFinished: json:" + json);
+                Toast.makeText(Map_activity.this, "json is :" + json, Toast.LENGTH_SHORT).show();
                 admin_text_message.setText(json);
             }
         });
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        //get all marker from server;
+        myMarker_dataArray = new ArrayList<marker_dataModel>();
+        service.get_marker("Hong Kong", new RESTService.onAjaxFinishedListener() {
+            @Override
+            public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
+                Log.i(TAG, "onFinished: url,json:" + url + "," + json);
+                String[] row = json.trim().split("\\|");
+                for (int i = 0; i < row.length; i++) {
+                    String[] col = row[i].split("\\,");
+                    myMarker_data = new marker_dataModel();
+                    myMarker_data.setUsername(col[0]);
+                    myMarker_data.setLongitude(col[1]);
+                    myMarker_data.setLatitude(col[2]);
+                    myMarker_data.setString_title(col[3]);
+                    myMarker_data.setString_body(col[4]);
+                    myMarker_data.setTime(col[5]);
+                    myMarker_dataArray.add(i, myMarker_data);
+                }
+            }
+        });
 
+
+        //update button:
+        buttonUpdate = (Button)findViewById(R.id.btn_update);
+        buttonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Map_activity.this, "updating...", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i <myMarker_dataArray.size() ; i++) {
+                    Log.i(TAG, "onCreate: username: " + myMarker_dataArray.get(i).getUsername());
+                }
+            }
+        });
+
+
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -104,7 +149,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(Map_activity.this, "update !", Toast.LENGTH_LONG).show();
 
         mMap = googleMap;
-        mMap.addMarker(createBubbleIcon("my location","body"));
+        mMap.addMarker(createBubbleIcon("my location", "body"));
 
 
         moveMap(userLocation);
@@ -117,8 +162,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
                     initiatePopupWindow(new_point);
 
                     googleMapClickable = false;
-                }
-                else {
+                } else {
                     Toast.makeText(Map_activity.this, "please click add button first!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -141,7 +185,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private MarkerOptions createBubbleIcon (String string_title,String string_body) {
+    private MarkerOptions createBubbleIcon(String string_title, String string_body) {
         IconGenerator icon = new IconGenerator(this);
         MarkerOptions markerOption = new MarkerOptions();
 
@@ -153,7 +197,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         return markerOption;
     }
 
-    private MarkerOptions createBubbleIcon (String string_title, String string_body,LatLng latlng) {
+    private MarkerOptions createBubbleIcon(String string_title, String string_body, LatLng latlng) {
         IconGenerator icon = new IconGenerator(this);
         MarkerOptions markerOption = new MarkerOptions();
 
@@ -175,7 +219,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
 
         int width = (int) (textWidth);
         int height = (int) (textHeight);
-        Log.d(TAG, "createPureTextIcon: text Width&Height"+width+","+height);
+        Log.d(TAG, "createPureTextIcon: text Width&Height" + width + "," + height);
         Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
 
@@ -193,14 +237,14 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void initiatePopupWindow (final LatLng new_point){
+    public void initiatePopupWindow(final LatLng new_point) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View layout = inflater.inflate(R.layout.popup_screen, (ViewGroup) this.findViewById(R.id.popup_element));
         layout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        Log.i(TAG, "initiatePopupWindow: "+layout.getMeasuredHeight()+","+layout.getMeasuredWidth());
+        Log.i(TAG, "initiatePopupWindow: " + layout.getMeasuredHeight() + "," + layout.getMeasuredWidth());
 //        popupWindow_addText = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow_addText = new PopupWindow(layout, layout.getMeasuredWidth(),layout.getMeasuredHeight() , true);
-        popupWindow_addText.showAtLocation(layout, Gravity.CENTER,0,0);
+        popupWindow_addText = new PopupWindow(layout, layout.getMeasuredWidth(), layout.getMeasuredHeight(), true);
+        popupWindow_addText.showAtLocation(layout, Gravity.CENTER, 0, 0);
         inputText = (EditText) layout.findViewById(R.id.input_text);
         inputTextBody = (EditText) layout.findViewById(R.id.input_text_body);
         buttonConfirm = (Button) layout.findViewById(R.id.btn_confirm);
@@ -219,24 +263,28 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
                 String string_title = inputText.getText().toString().trim();
                 String string_body = inputTextBody.getText().toString().trim();
                 Toast.makeText(Map_activity.this, "you confirm the text to add!", Toast.LENGTH_SHORT).show();
-
-                mMap.addMarker(createBubbleIcon(string_title,string_body,new_point)).showInfoWindow();
                 String longitude = Double.toString(new_point.longitude);
                 String latitude = Double.toString(new_point.latitude);
-                Log.i(TAG, "?onClick: "+string_body);
-                service.add_new_marker("and username",longitude,latitude,string_title,string_body,"time", new RESTService.onAjaxFinishedListener() {
-                    @Override
-                    public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
-                        Log.i(TAG, "onFinished: url,json"+url+","+json);
-                        Toast.makeText(Map_activity.this, "Json: "+json, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Log.i(TAG, "?onClick: " + string_body);
+                add_marker("username_from android", longitude, latitude, string_title, string_body, new_point);
                 popupWindow_addText.dismiss();
 
             }
         });
 
 
-
     }
+
+    public void add_marker(String username, String longitude, String latitude, String string_title, String string_body, LatLng new_point) {
+        mMap.addMarker(createBubbleIcon(string_title, string_body, new_point)).showInfoWindow();
+        service.add_new_marker(username, longitude, latitude, string_title, string_body, "time", new RESTService.onAjaxFinishedListener() {
+            @Override
+            public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
+                Log.i(TAG, "onFinished: url,json" + url + "," + json);
+                Toast.makeText(Map_activity.this, "Json: " + json, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }
