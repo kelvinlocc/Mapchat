@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.kkskysite.mapchat.Uility.RESTService;
@@ -37,6 +39,10 @@ import com.kkskysite.mapchat.Uility.marker_dataModel;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 //
 /*
@@ -55,13 +61,15 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     LatLng userLocation;
     PopupWindow popupWindow_addText;
     EditText inputText, inputTextBody;
-    Button buttonConfirm, buttonCancel,buttonUpdate;
+    Button buttonConfirm, buttonCancel, buttonUpdate;
     TextView admin_text_message;
     LatLng new_marker_latLng;
 
     RESTService service;
     marker_dataModel myMarker_data;
     ArrayList<marker_dataModel> myMarker_dataArray;
+    HashSet hSet;
+
 //    String
 
     @Override
@@ -70,7 +78,10 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.map_activity);
         context = this;
         service = new RESTService(this);
+        hSet = new HashSet();
         Log.i(TAG, "onCreate2: ");
+
+
 
         addText = (Button) findViewById(R.id.btn_add_text);
         addText.setOnClickListener(new View.OnClickListener() {
@@ -92,38 +103,41 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         });
         //get all marker from server;
         myMarker_dataArray = new ArrayList<marker_dataModel>();
-        service.get_marker("Hong Kong", new RESTService.onAjaxFinishedListener() {
-            @Override
-            public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
-                Log.i(TAG, "onFinished: url,json:" + url + "," + json);
-                String[] row = json.trim().split("\\|");
-                for (int i = 0; i < row.length; i++) {
-                    String[] col = row[i].split("\\,");
-                    myMarker_data = new marker_dataModel();
-                    myMarker_data.setUsername(col[0]);
-                    myMarker_data.setLongitude(col[1]);
-                    myMarker_data.setLatitude(col[2]);
-                    myMarker_data.setString_title(col[3]);
-                    myMarker_data.setString_body(col[4]);
-                    myMarker_data.setTime(col[5]);
-                    myMarker_dataArray.add(i, myMarker_data);
-                }
-            }
-        });
 
+        //update the map:
+        updateMap_data();
 
         //update button:
-        buttonUpdate = (Button)findViewById(R.id.btn_update);
+        buttonUpdate = (Button) findViewById(R.id.btn_update);
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                updateMap_data();
                 Toast.makeText(Map_activity.this, "updating...", Toast.LENGTH_SHORT).show();
-                for (int i = 0; i <myMarker_dataArray.size() ; i++) {
+                for (int i = 0; i < myMarker_dataArray.size(); i++) {
                     Log.i(TAG, "onCreate: username: " + myMarker_dataArray.get(i).getUsername());
+                    String username = myMarker_dataArray.get(i).getUsername();
+                    String string_title = myMarker_dataArray.get(i).getString_title();
+                    String string_body = myMarker_dataArray.get(i).getString_body();
+                    Log.i(TAG, "onClick:LOLA " + myMarker_dataArray.get(i).getLongitude() + "," + myMarker_dataArray.get(i).getLatitude());
+                    Double x = Double.parseDouble(myMarker_dataArray.get(i).getLongitude());
+                    Double y = Double.parseDouble(myMarker_dataArray.get(i).getLatitude());
+                    LatLng new_location = new LatLng(y, x);
+
+                    //check if the marker is already existed!
+                    if (!isMarkerExist(x)) {
+                        hSet.add(x);
+                        Log.i(TAG, "onClick: add new marker x: "+x);
+                        Log.i(TAG, "onClick: add new marker hSet.size: "+hSet.size());
+                        add_marker(username, string_title, string_body, new_location);
+                    }
+
+
                 }
+
+
             }
         });
-
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -144,6 +158,34 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         Log.i(TAG, "onCreate: end");
     }
 
+    public Boolean isMarkerExist(Double x) {
+
+        Log.i(TAG, "isMarkerExist?: Double of x: "+x);
+        Boolean isExist = hSet.contains(x);
+        return isExist;
+    }
+
+    public void updateMap_data() {
+        service.get_marker("Hong Kong", new RESTService.onAjaxFinishedListener() {
+            @Override
+            public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
+                Log.i(TAG, "onFinished: url,json:" + url + "," + json);
+                String[] row = json.trim().split("\\|");
+                for (int i = 0; i < row.length; i++) {
+                    String[] col = row[i].split("\\,");
+                    myMarker_data = new marker_dataModel();
+                    myMarker_data.setUsername(col[0]);
+                    myMarker_data.setLongitude(col[1]);
+                    myMarker_data.setLatitude(col[2]);
+                    myMarker_data.setString_title(col[3]);
+                    myMarker_data.setString_body(col[4]);
+                    myMarker_data.setTime(col[5]);
+                    myMarker_dataArray.add(i, myMarker_data);
+                }
+            }
+        });
+    }
+
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         Toast.makeText(Map_activity.this, "update !", Toast.LENGTH_LONG).show();
@@ -155,11 +197,11 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
         moveMap(userLocation);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng new_point) {
+            public void onMapClick(LatLng new_location) {
 
                 if (googleMapClickable) {
 //                    new_marker_latLng  = point;
-                    initiatePopupWindow(new_point);
+                    initiatePopupWindow(new_location);
 
                     googleMapClickable = false;
                 } else {
@@ -237,7 +279,7 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void initiatePopupWindow(final LatLng new_point) {
+    public void initiatePopupWindow(final LatLng new_location) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View layout = inflater.inflate(R.layout.popup_screen, (ViewGroup) this.findViewById(R.id.popup_element));
         layout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -263,10 +305,9 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
                 String string_title = inputText.getText().toString().trim();
                 String string_body = inputTextBody.getText().toString().trim();
                 Toast.makeText(Map_activity.this, "you confirm the text to add!", Toast.LENGTH_SHORT).show();
-                String longitude = Double.toString(new_point.longitude);
-                String latitude = Double.toString(new_point.latitude);
+
                 Log.i(TAG, "?onClick: " + string_body);
-                add_marker("username_from android", longitude, latitude, string_title, string_body, new_point);
+                add_marker("username_from android", string_title, string_body, new_location);
                 popupWindow_addText.dismiss();
 
             }
@@ -275,8 +316,11 @@ public class Map_activity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void add_marker(String username, String longitude, String latitude, String string_title, String string_body, LatLng new_point) {
-        mMap.addMarker(createBubbleIcon(string_title, string_body, new_point)).showInfoWindow();
+    public void add_marker(String username, String string_title, String string_body, LatLng new_location) {
+        String longitude = Double.toString(new_location.longitude);
+        String latitude = Double.toString(new_location.latitude);
+
+        mMap.addMarker(createBubbleIcon(string_title, string_body, new_location)).showInfoWindow();
         service.add_new_marker(username, longitude, latitude, string_title, string_body, "time", new RESTService.onAjaxFinishedListener() {
             @Override
             public void onFinished(String url, String json, AjaxStatus status) throws JSONException {
