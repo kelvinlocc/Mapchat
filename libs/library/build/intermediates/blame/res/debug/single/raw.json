@@ -60,12 +60,12 @@
         "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_draw_order_ground_overlay.kml"
     },
     {
-        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\raw\\amu_nested_folders.kml",
-        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_nested_folders.kml"
-    },
-    {
         "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\raw\\amu_poly_style_boolean_alpha.kml",
         "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_poly_style_boolean_alpha.kml"
+    },
+    {
+        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\raw\\amu_nested_folders.kml",
+        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_nested_folders.kml"
     },
     {
         "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\debug\\raw\\amu_ballon_gx_prefix.kml",

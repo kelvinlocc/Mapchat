@@ -44,12 +44,12 @@
         "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_multiple_placemarks.kml"
     },
     {
-        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\release\\raw\\amu_basic_placemark.kml",
-        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_basic_placemark.kml"
-    },
-    {
         "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\release\\raw\\amu_document_nest.kml",
         "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_document_nest.kml"
+    },
+    {
+        "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\release\\raw\\amu_basic_placemark.kml",
+        "source": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\res\\raw\\amu_basic_placemark.kml"
     },
     {
         "merged": "C:\\Users\\chichiu\\Documents\\GitHub\\Mapchat\\libs\\library\\build\\intermediates\\res\\merged\\release\\raw\\amu_poly_style_boolean_numeric.kml",
